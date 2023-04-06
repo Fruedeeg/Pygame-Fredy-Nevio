@@ -49,7 +49,7 @@ while run:
     
     if xobject[0] == xplayer+5 or xobject[0] == xplayer-5 and yobject[0] == yplayer+5 or yobject[0] == yplayer-5:
         win.fill((255, 0, 0))
-        pygame.time.wait(200)
+        pygame.time.wait(2000)
 
     pygame.draw.rect(win, (0, 255, 0), (xplayer, yplayer, width, height))      
     pygame.display.update()
