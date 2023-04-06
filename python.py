@@ -25,8 +25,6 @@ def randomobject(g):
     object(z+g, x+g)
     yobject[g] += 1
 
-def fail():
-    
 
 while run:
     pygame.time.delay(10)
