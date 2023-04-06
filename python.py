@@ -1,7 +1,8 @@
 import pygame
+from pygame.locals import*
 import random
 pygame.init()
-win = pygame.display.set_mode((500, 1000))
+win = pygame.display.set_mode((1000, 1000))
 z = 0
 x = 0
 v = 0
@@ -12,6 +13,7 @@ yobject = [50]
 width = 20
 height = 20
 vel = 2
+img = pygame.image.load('img.jpg')
 run = True
 
 def object(xnumber, ynumber):
@@ -22,6 +24,9 @@ def object(xnumber, ynumber):
 def randomobject(g):
     object(z+g, x+g)
     yobject[g] += 1
+
+def fail():
+    
 
 while run:
     pygame.time.delay(10)
@@ -48,7 +53,8 @@ while run:
     #randomobject(6)
     
     if xobject[0] == xplayer+5 or xobject[0] == xplayer-5 and yobject[0] == yplayer+5 or yobject[0] == yplayer-5:
-        win.fill((255, 0, 0))
+        win.blit(img,(200,300))
+        pygame.display.flip()
         pygame.display.update()
         pygame.time.wait(2000)
 
