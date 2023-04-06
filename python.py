@@ -25,7 +25,12 @@ def randomobject(g):
     object(z+g, x+g)
     yobject[g] += 1
 
-
+def fail(g):
+    if xobject[g] == xplayer+5 or xobject[g] == xplayer-5 and yobject[g] == yplayer+5 or yobject[g] == yplayer-5:
+        win.blit(img,(200,300))
+        pygame.display.flip()
+        pygame.display.update()
+        pygame.time.wait(2000)
 while run:
     pygame.time.delay(10)
     for event in pygame.event.get():
@@ -43,18 +48,20 @@ while run:
 
     win.fill((0, 0, 0))
     randomobject(0)
-    #randomobject(1)
-    #randomobject(2)
-    #randomobject(3)
-    #randomobject(4)
-    #randomobject(5)
-    #randomobject(6)
-    
-    if xobject[0] == xplayer+5 or xobject[0] == xplayer-5 and yobject[0] == yplayer+5 or yobject[0] == yplayer-5:
-        win.blit(img,(200,300))
-        pygame.display.flip()
-        pygame.display.update()
-        pygame.time.wait(2000)
+    randomobject(1)
+    randomobject(2)
+    randomobject(3)
+    randomobject(4)
+    randomobject(5)
+    randomobject(6)
+    fail(0)
+    fail(1)
+    fail(2)
+    fail(3)
+    fail(4)
+    fail(5)
+    fail(6)
+
 
     pygame.draw.rect(win, (0, 255, 0), (xplayer, yplayer, width, height))      
     pygame.display.update()
