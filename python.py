@@ -40,14 +40,14 @@ while run:
 
     win.fill((0, 0, 0))
     randomobject(0)
-    randomobject(1)
-    randomobject(2)
-    randomobject(3)
-    randomobject(4)
-    randomobject(5)
-    randomobject(6)
+    #randomobject(1)
+    #randomobject(2)
+    #randomobject(3)
+    #randomobject(4)
+    #randomobject(5)
+    #randomobject(6)
     
-    if xobject[0] == xplayer and yobject[0] == yplayer:
+    if xobject[0] == xplayer:
         win.fill((255, 0, 0))
         pygame.time.wait(200)
 
