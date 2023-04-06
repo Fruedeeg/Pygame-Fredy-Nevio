@@ -47,7 +47,7 @@ while run:
     #randomobject(5)
     #randomobject(6)
     
-    if xobject[0] == xplayer and yobject[0] == yplayer:
+    if xobject[0] == xplayer+5 or xobject[0] == xplayer-5 and yobject[0] == yplayer+5 or yobject[0] == yplayer-5:
         win.fill((255, 0, 0))
         pygame.time.wait(200)
 
