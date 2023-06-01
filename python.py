@@ -7,8 +7,8 @@ z = 0
 x = 0
 v = 0
 
-xplayer = 200
-yplayer = 600
+xplayer = 500
+yplayer = 50
 xobject = [30]
 yobject = [50]
 width = 20
@@ -25,10 +25,10 @@ def object(xnumber, ynumber):
 
 def randomobject(g):
     object(z+g, x+g)
-    yobject[g] += 2
+    xobject[g] += 2
 
 def fail(f):
-    if yobject[f] == yplayer:
+    if xobject[f] == xplayer:
         win.blit(img,(200,300))
         pygame.display.flip()
         pygame.display.update()
@@ -44,8 +44,8 @@ while run:
         xplayer -= vel
     if keys[pygame.K_RIGHT] and xplayer<500-width:
         xplayer += vel
-#    if keys[pygame.K_UP] and y>0:
-#        y -= vel
+    if keys[pygame.K_UP] and yplayer>0:
+        yplayer -= 30
 #    if keys[pygame.K_DOWN] and y<500-height:
 #        y += vel
     win.fill(0)
@@ -65,5 +65,4 @@ while run:
     #fail(5)
     #fail(6)
     pygame.display.update()
-    
 pygame.quit()
