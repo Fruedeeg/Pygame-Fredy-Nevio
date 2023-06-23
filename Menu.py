@@ -35,8 +35,8 @@ menuBG = pygame.image.load("menubg.jpg").convert()
 menuBG = pygame.transform.scale(menuBG, (width, height))
 menuBG2 = pygame.image.load("menubg2.jpg").convert()
 menuBG2 = pygame.transform.scale(menuBG2, (width, height))
-blue = pygame.image.load("blue.png")
-blue = pygame.transform.scale(blue, (width, height))
+blueImg = pygame.image.load("blue.png")
+blueImg = pygame.transform.scale(blue, (width, height))
 
 clock = pygame.time.Clock()
 
@@ -79,7 +79,7 @@ while show_menu:
             break
         elif quitButton.collidepoint(x, y):
             flushSound.play()
-            window.blit(blue, (0, 0))
+            window.blit(blueImg, (0, 0))
             pygame.display.flip()
             pygame.time.delay(3000)
             pygame.quit()
