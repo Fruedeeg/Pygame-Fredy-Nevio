@@ -284,7 +284,7 @@ while game:
             logoY *= 1.016
             pygame.display.flip()
             window.fill(white)
-        pygame.mixer.music.load("21 - Game Over - Yuzo Koshiro.mp3")
+        pygame.mixer.music.load("20 - Game Over - Yuzo Koshiro.mp3")
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play()
         
