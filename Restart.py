@@ -78,7 +78,7 @@ while show_menu:
             show_menu = False
             import Game
             Game()
-            break
+            sys.exit()
         elif quitButton.collidepoint(x, y):
             flushSound.play()
             window.blit(blue, (0, 0))
@@ -111,6 +111,9 @@ while show_menu:
                 break
             elif selected_button == 1:
                 flushSound.play()
+                window.blit(blue, (0, 0))
+                pygame.display.flip()
+                pygame.time.delay(3000)
                 pygame.quit()
                 sys.exit()
     if playButton.collidepoint(pygame.mouse.get_pos()):

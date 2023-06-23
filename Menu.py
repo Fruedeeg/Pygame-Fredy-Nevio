@@ -3,9 +3,10 @@ import sys
 import random
 pygame.display.set_caption("game")
 pygame.init()
-
+pygame.mixer.stop()
+pygame.mixer.music.stop()
 pygame.mixer.music.load("01 - Player Select V2 - Yuzo Koshiro.mp3")
-pygame.mixer.music.set_volume(0.25)
+pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
 width = 1000
@@ -21,12 +22,12 @@ pygame.mouse.set_cursor((13,13),cursor)
 
 successSound = pygame.mixer.Sound("success.mp3")
 clickSound = pygame.mixer.Sound("mech.mp3")
-clickSound.set_volume(0.3)
+clickSound.set_volume(0.5)
 
 flushSound = pygame.mixer.Sound("flush.mp3")
-flushSound.set_volume(0.5)
+flushSound.set_volume(0.7)
 clicksound2 = pygame.mixer.Sound("mech2.mp3")
-clicksound2.set_volume(0.3)
+clicksound2.set_volume(0.5)
 logo = pygame.image.load("FredyGame.png").convert_alpha()
 logo_x = (width - logo.get_width()) // 2
 logo_y = 50
@@ -36,7 +37,7 @@ menuBG = pygame.transform.scale(menuBG, (width, height))
 menuBG2 = pygame.image.load("menubg2.jpg").convert()
 menuBG2 = pygame.transform.scale(menuBG2, (width, height))
 blueImg = pygame.image.load("blue.png")
-blueImg = pygame.transform.scale(blue, (width, height))
+blueImg = pygame.transform.scale(blueImg, (width, height))
 
 clock = pygame.time.Clock()
 
@@ -56,7 +57,7 @@ frame = 0
 while show_menu:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            failSound.play()
+            flushSound.play()
             show_menu = False
     if event.type == pygame.MOUSEBUTTONDOWN:
         x, y = event.pos
@@ -74,9 +75,9 @@ while show_menu:
                 frame += 1
             pygame.mixer_music.fadeout(1000)
             show_menu = False
+            pygame.mixer.music.stop()
             import Game
             Game()
-            break
         elif quitButton.collidepoint(x, y):
             flushSound.play()
             window.blit(blueImg, (0, 0))
@@ -87,7 +88,7 @@ while show_menu:
         elif musicButton.collidepoint(x, y):
             import Music
             Music()
-            break
+            sys.exit()
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP:
             selected_button = 0

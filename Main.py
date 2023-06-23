@@ -91,9 +91,10 @@ while show_title:
                 pygame.display.flip()
                 window.fill(white)
             pygame.time.wait(500)
+            show_title = False
             import Menu
             Menu()
-    
+            sys.exit()    
     counter += 1
     if counter < 40:
         yButton -= upVel

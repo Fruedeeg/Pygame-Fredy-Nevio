@@ -36,6 +36,7 @@ walk = pygame.image.load("forward_idle.png")
 walkRight = pygame.image.load("walk_right.png")
 walkLeft = pygame.image.load("walk_left.png")
 
+isRemoved = True
 logo = pygame.image.load("youFailed.png")
 logo_x = (width - logo.get_width()) // 2
 logo_y = 0
@@ -306,6 +307,7 @@ while game:
             window.fill(white)
         import Restart
         Restart()
+        game = False
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP and jumping == False:
             doubleCount2 += 1
@@ -577,6 +579,7 @@ while game:
     #         frame = 0
     #     counter = 0
     for bullet in bullets:
+        isRemoved = False
         bullet[0] += bullet[2][0]
         bullet[1] += bullet[2][1]
 
@@ -600,10 +603,11 @@ while game:
                 ammo[i] = 0
     for bullet in bullets:
         for i in range(0, len(tileRects)):
-            if bullet != 0 and tileRects[i].collidepoint(bullet[0], bullet[1]):
+            if bullet != 0 and tileRects[i].collidepoint(bullet[0], bullet[1]) and not isRemoved:
                 print("hit")
                 bullets.remove(bullet)
                 hitSound.play()
+                isRemoved = True
     
     if left:
         smallWindow.blit(walkLeft.subsurface(walkCurrent,0, 32,32), player)
