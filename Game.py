@@ -36,6 +36,12 @@ walk = pygame.image.load("forward_idle.png")
 walkRight = pygame.image.load("walk_right.png")
 walkLeft = pygame.image.load("walk_left.png")
 
+logo = pygame.image.load("youFailed.png")
+logo_x = (width - logo.get_width()) // 2
+logo_y = 0
+logoX = logo.get_width()
+logoY = logo.get_height()
+
 ammoImg = pygame.image.load("ammo.png") 
 ammoImg = pygame.transform.scale(ammoImg, (37/1.5, 32/1.5))
 
@@ -52,16 +58,16 @@ map1 = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
-        ['0','0','0','2','2','2','2','2','2','2','2','2','2','2','0','0','0','0','0','0',],
+        ['0','0','7','2','2','2','2','2','2','2','2','2','2','2','6','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
-        ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
+        ['0','0','3','4','4','4','4','4','5','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
-        ['0','0','1','1','0','0','0','0','0','0','2','2','0','0','0','0','0','0','0','0',],
+        ['0','0','1','1','0','0','0','0','0','7','2','2','6','0','0','0','0','0','0','0',],
         ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2',],
         ['0','0','1','1','2','2','2','2','2','2','2','2','0','0','0','2','2','2','1','1',],
@@ -179,6 +185,12 @@ snowCliffLeft = pygame.transform.scale(snowCliffLeft, (tilesize, tilesize))
 snowCliffRight = pygame.image.load("Tiles/snowCliffRight.png")
 snowCliffRight = pygame.transform.scale(snowCliffRight, (tilesize, tilesize))
 
+grassCliffLeft = pygame.image.load("Tiles/grassCliffLeft.png")
+grassCliffLeft = pygame.transform.scale(grassCliffLeft, (tilesize, tilesize))
+
+grassCliffRight = pygame.image.load("Tiles/grassCliffRight.png")
+grassCliffRight = pygame.transform.scale(grassCliffRight, (tilesize, tilesize))
+
 snowMid = pygame.image.load("Tiles/snowMid.png")
 snowMid = pygame.transform.scale(snowMid, (tilesize, tilesize))
 
@@ -221,22 +233,22 @@ while game:
     if x-floorX > score:
         score = int(x-floorX)
     for i in range(0,int(x/20)-5):
-        if map1[i][len(map1[i])-1] == '1':
-            map1[i].append(f"{random.randint(-2,2)}")
-        if map1[i][len(map1[i])-1] == '4':
+        if map2[i][len(map2[i])-1] == '1':
+            map2[i].append(f"{random.randint(-2,2)}")
+        if map2[i][len(map2[i])-1] == '4':
             generate = random.randint(4,5)
-            map1[i].append(f"{generate}")
-        if map1[i][len(map1[i])-1] == '5':
-            map1[i].append(f"0")
-        if map1[i][len(map1[i])-1] == '3':
+            map2[i].append(f"{generate}")
+        if map2[i][len(map2[i])-1] == '5':
+            map2[i].append(f"0")
+        if map2[i][len(map2[i])-1] == '3':
             generate = random.randint(4, 5)
-            map1[i].append(f"{generate}")
-        if map1[i][len(map1[i])-1] == '0':
-            map1[i].append(f"{random.randint(-20,3)}")
-        elif map1[i][len(map1[i])-1] == '2':
-            map1[i].append(f"{random.randint(0,2)}")
+            map2[i].append(f"{generate}")
+        if map2[i][len(map2[i])-1] == '0':
+            map2[i].append(f"{random.randint(-20,3)}")
+        elif map2[i][len(map2[i])-1] == '2':
+            map2[i].append(f"{random.randint(0,2)}")
         else:
-            map1[i].append(f"{random.randint(-20,3)}")
+            map2[i].append(f"{random.randint(-20,3)}")
         
             
 
@@ -263,12 +275,35 @@ while game:
     if event.type == pygame.MOUSEBUTTONUP:
         pygame.mouse.set_cursor((12,12),cursor)
     if y > 500:
-        finalScore = score
-        pygame.mixer.music.fadeout(500)
+        failSound = pygame.mixer.Sound("invalid.mp3")
+        failSound.set_volume(0.5)
+        failSound.play()
+        for i in range(0, 100):
+            window.blit(pygame.transform.scale(logo , (logoX, logoY)), (logo_x, logo_y))
+            logoX *= 1.016
+            logoY *= 1.016
+            pygame.display.flip()
+            window.fill(white)
         pygame.mixer.music.load("21 - Game Over - Yuzo Koshiro.mp3")
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play()
-        pygame.time.wait(5000)
+        
+        logoY += 20
+        for i in range(0, 270):
+            window.blit(pygame.transform.scale(logo , (logoX, logoY)), (logo_x, logo_y))
+            logo_x -= 13
+            pygame.display.flip()
+            window.fill(white)
+                
+        logo_x += 1755*2
+        pygame.mixer.music.fadeout(2000)
+            
+        for i in range(0, 100):
+            window.blit(pygame.transform.scale(logo , (logoX, logoY)), (logo_x, logo_y))
+            logoX *= 0.984
+            logoY *= 0.984
+            pygame.display.flip()
+            window.fill(white)
         import Restart
         Restart()
     if event.type == pygame.KEYDOWN:
@@ -438,7 +473,11 @@ while game:
                 smallWindow.blit(snowMid, (x1*tilesize+floorX,y1*tilesize))
             elif tile == '5':
                 smallWindow.blit(snowCliffRight, (x1*tilesize+floorX,y1*tilesize))
-            if tile == '1' or tile == '2' or tile =='3' or tile == '4' or tile == '5':
+            elif tile == '6':
+                smallWindow.blit(grassCliffRight, (x1*tilesize+floorX,y1*tilesize))
+            elif tile == '7':
+                smallWindow.blit(grassCliffLeft, (x1*tilesize+floorX,y1*tilesize))
+            if tile == '1' or tile == '2' or tile =='3' or tile == '4' or tile == '5' or tile == '6' or tile == '7':
                 tileRects.append((pygame.Rect(x1*tilesize,y1*tilesize, tilesize, tilesize)))
                 tilecount += 1
             x1 += 1
@@ -449,11 +488,21 @@ while game:
         x2 = 0
         for tile in row:
             if tile == '1':
-                smallWindow.blit(dirt, (x2*tilesize+floorX+500,y2*tilesize))
+                smallWindow.blit(dirt, (x2*tilesize+floorX,y2*tilesize))
             elif tile == '2':
-                smallWindow.blit(grass, (x2*tilesize+floorX+500,y2*tilesize))
-            if tile != '0':
-                tileRects.append((pygame.Rect(x2*tilesize+500,y2*tilesize, tilesize, tilesize)))
+                smallWindow.blit(grass, (x2*tilesize+floorX,y2*tilesize))
+            elif tile == '3':
+                smallWindow.blit(snowCliffLeft, (x2*tilesize+floorX,y2*tilesize))
+            elif tile == '4':
+                smallWindow.blit(snowMid, (x2*tilesize+floorX,y2*tilesize))
+            elif tile == '5':
+                smallWindow.blit(snowCliffRight, (x2*tilesize+floorX,y2*tilesize))
+            elif tile == '6':
+                smallWindow.blit(grassCliffRight, (x2*tilesize+floorX,y2*tilesize))
+            elif tile == '7':
+                smallWindow.blit(grassCliffLeft, (x2*tilesize+floorX,y2*tilesize))
+            if tile == '1' or tile == '2' or tile =='3' or tile == '4' or tile == '5' or tile == '6' or tile == '7':
+                tileRects.append((pygame.Rect(x2*tilesize,y2*tilesize, tilesize, tilesize)))
                 tilecount += 1
             x2 += 1
         y2+= 1

@@ -13,7 +13,7 @@ pygame.mixer.music.play(-1)
 
 successSound = pygame.mixer.Sound("success.mp3")
 successSound.set_volume(2)
-wooshSound = pygame.mixer.Sound("woosh.mp3")
+wooshSound = pygame.mixer.Sound("fireswoosh.ogg")
 wooshSound.set_volume(0.5)
 
 
