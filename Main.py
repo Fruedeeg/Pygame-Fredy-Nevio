@@ -8,7 +8,7 @@ height = 1000
 window = pygame.display.set_mode((width, height))
 
 pygame.mixer.music.load("06 - Ready Funk - Yuzo Koshiro.mp3")
-pygame.mixer.music.set_volume(0.25)
+pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
 successSound = pygame.mixer.Sound("success.mp3")
@@ -28,8 +28,6 @@ logo_y = 50
 menuBG = pygame.image.load("menubg.jpg").convert()
 menuBG = pygame.transform.scale(menuBG, (width, height))
 menuBG2 = pygame.image.load("menubg2.jpg").convert()
-
-
 
 clock = pygame.time.Clock()
 xButton = width // 2 - 250

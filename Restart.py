@@ -106,8 +106,8 @@ while show_menu:
                     frame += 1
                 pygame.mixer_music.fadeout(1000)
                 show_menu = False
-                import Cleaner
-                Cleaner.main()
+                import Game
+                Game.main()
                 break
             elif selected_button == 1:
                 flushSound.play()

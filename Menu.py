@@ -4,7 +4,7 @@ import random
 pygame.display.set_caption("game")
 pygame.init()
 
-pygame.mixer.music.load("players.mp3")
+pygame.mixer.music.load("01 - Player Select V2 - Yuzo Koshiro.mp3")
 pygame.mixer.music.set_volume(0.25)
 pygame.mixer.music.play(-1)
 
@@ -12,8 +12,8 @@ width = 1000
 height = 1000
 playing = 0
 playing2 = 0
+playing3 = 0
 window = pygame.display.set_mode((width, height))
-
 
 cursor = pygame.image.load("cursor.png")
 cursor = pygame.transform.scale(cursor, (30, 30))
@@ -42,7 +42,7 @@ clock = pygame.time.Clock()
 
 playButton = pygame.Rect(width // 2 - 100, height // 2 - 25, 205, 50)
 quitButton = pygame.Rect(width // 2 - 100, height // 2 + 50, 205, 50)
-
+musicButton = pygame.Rect(width // 2 - 100, height // 2 + 125, 205, 50)
 black = 0,0,0
 white = 255, 255, 255
 red = 255, 0, 0
@@ -84,6 +84,10 @@ while show_menu:
             pygame.time.delay(3000)
             pygame.quit()
             sys.exit()
+        elif musicButton.collidepoint(x, y):
+            import Music
+            Music()
+            break
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP:
             selected_button = 0
@@ -111,6 +115,9 @@ while show_menu:
                 flushSound.play()
                 pygame.quit()
                 sys.exit()
+            elif selected_button == 3:
+                import Music
+                Music()
     if playButton.collidepoint(pygame.mouse.get_pos()):
         selected_button = 0
         green = 100, 170, 100
@@ -127,9 +134,18 @@ while show_menu:
             clicksound2.play()
             playing2 = 1
     else:
-        red = 255, 0 ,0
+        red = 255, 0, 0
         playing2 = 0
-    if selected_button == 0:
+    if musicButton.collidepoint(pygame.mouse.get_pos()):
+        selected_button = 3
+        blue = 100, 100, 255
+        if playing3 == 0:
+            clickSound.play()
+            playing3 = 1
+    else:
+        blue = 50, 50, 255
+        playing3 = 0
+    if selected_button == 0 or selected_button == 3:
         window.blit(menuBG, (0, 0))
     else:
         window.blit(menuBG2, (0, 0))
@@ -149,6 +165,13 @@ while show_menu:
         pygame.draw.rect(window, black, quitButton, border_radius=10, width=4)
     text_rect = text.get_rect()
     text_rect.center = quitButton.center
+    window.blit(text, text_rect)
+    text = font.render("Music", True, white)
+    pygame.draw.rect(window, blue, musicButton, border_radius=10)
+    if selected_button == 3:
+        pygame.draw.rect(window, black, musicButton, border_radius=10, width=4)
+    text_rect = text.get_rect()
+    text_rect.center = musicButton.center
     window.blit(text, text_rect)
     pygame.display.flip()
     clock.tick(60)
