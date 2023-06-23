@@ -35,6 +35,7 @@ tileY = 0
 walk = pygame.image.load("forward_idle.png")
 walkRight = pygame.image.load("walk_right.png")
 walkLeft = pygame.image.load("walk_left.png")
+roll = pygame.image.load("roll.png")
 
 isRemoved = True
 logo = pygame.image.load("youFailed.png")
@@ -607,9 +608,10 @@ while game:
                 print("hit")
                 bullets.remove(bullet)
                 hitSound.play()
+                poof = smallWindow.blit(pygame.transform.scale((pygame.image.load("poof.png")),(12,12)), (bullet[0],bullet[1]))
                 isRemoved = True
     
-    if left:
+    if left and y_Velocity <=0:
         smallWindow.blit(walkLeft.subsurface(walkCurrent,0, 32,32), player)
         frame += 1
         if frame == 5:
@@ -617,7 +619,7 @@ while game:
             frame = 0
         if walkCurrent == 192:
             walkCurrent = 0
-    if right:
+    if right and not left and y_Velocity <=0:
         smallWindow.blit(walkRight.subsurface(walkCurrent,0, 32,32), player)
         frame += 1
         if frame == 5:
@@ -625,7 +627,7 @@ while game:
             frame = 0
         if walkCurrent == 192:
             walkCurrent = 0
-    if not left and not right:
+    if not left and not right and y_Velocity <=0:
         smallWindow.blit(walk.subsurface(walkCurrent,0, 32,32), player)
         frame += 1
         if frame == 5:
@@ -633,7 +635,14 @@ while game:
             frame = 0
         if walkCurrent == 192:
             walkCurrent = 0
-
+    if y_Velocity > 0:
+        smallWindow.blit(roll.subsurface(walkCurrent,0, 32,64), player)
+        frame += 1
+        if frame == 5:
+            walkCurrent += 32
+            frame = 0
+        if walkCurrent == 192:
+            walkCurrent = 0
 
     scoreRect.topright = (x + 45, y - 15 - impact/2)
     scoreText = font.render("Score: " + str(score), True, black)
