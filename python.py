@@ -14,6 +14,8 @@ yobject = [50]
 width = 20
 height = 20
 vel = 2
+jump = 3
+gravity = 1
 img = pygame.image.load('img.jpg')
 run = True
 rect1 = pygame.Rect((xobject[0], yobject[0], width, height))
@@ -28,7 +30,7 @@ def randomobject(g):
     xobject[g] += 2
 
 def fail(f):
-    if xobject[f] == xplayer:
+    if xobject[f] == xplayer and yplayer >= 20:
         win.blit(img,(200,300))
         pygame.display.flip()
         pygame.display.update()
@@ -45,9 +47,9 @@ while run:
     if keys[pygame.K_RIGHT] and xplayer<500-width:
         xplayer += vel
     if keys[pygame.K_UP] and yplayer>0:
-        yplayer -= 30
-#    if keys[pygame.K_DOWN] and y<500-height:
-#        y += vel
+        yplayer -= jump
+    if yplayer <= 50:
+        yplayer += gravity
     win.fill(0)
     pygame.draw.rect(win, (0, 255, 0), (xplayer, yplayer, width, height)) 
     randomobject(0)
