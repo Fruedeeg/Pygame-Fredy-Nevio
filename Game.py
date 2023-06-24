@@ -53,6 +53,7 @@ pygame.mixer.music.play(-1)
 pygame.mixer.music.play
 idleframe = 0
 tilecount =0
+dashCounter = 0
 
 map1 = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
         ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',],
@@ -209,29 +210,18 @@ PPS = 3
 ammo = [pygame.Rect(400+floorX,400, 15, 15),pygame.Rect(400+floorX,50, 15, 15), pygame.Rect(400+floorX,300, 15, 15)]
 game = True
 
-
-
-
-def collisionTest(rect, tiles):
-    hitList = []
-    for tile in tiles:
-        if rect.colliderect(tile):
-            hitList.append(tile)
-    return hitList
-
-def move(rect, movement, tiles):
-    collision_types = {'top': False,'bottom': False,'right': False,'left': False, }
-    rect.x += movement[0]
-    hitList = collisionTest(rect, tiles)
-    for tile in hitList:
-        if movement[0] > 0:
-            rect.right = tile.left
-            collision_types['right'] = True
-        elif movement[0] < 0:
-            rect.left = tile.right
-            collision_types['left'] = True
-            
+dash = False
 while game:
+    color = (0,0,0)
+    dashCounter += 1
+    if dashCounter<60:
+        dash = False
+    if dashCounter > 60:
+        color = (0,255,0)
+    tileRects = []
+    player = pygame.Rect(x, y , playerWidth, playerHeight)
+    direction = rightVelocity -leftVelocity
+
     if x-floorX > score:
         score = int(x-floorX)
     for i in range(0,int(x/20)-5):
@@ -254,10 +244,6 @@ while game:
         
             
 
-    tileRects = []
-    player = pygame.Rect(x, y , playerWidth, playerHeight)
-    direction = rightVelocity -leftVelocity
-
     for i in range(0, len(ammo)):
         if ammo[i]!=0:
             ammo[i].left = 400+floorX
@@ -268,14 +254,81 @@ while game:
         if event.type == pygame.QUIT:
             pygame.quit()         
 
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        pygame.mouse.set_cursor((12,12), smallCursor)
-        if pauseRect.collidepoint(pygame.mouse.get_pos()):
-            paused = True
-            color = white
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pygame.mouse.set_cursor((12,12), smallCursor)
+            if pauseRect.collidepoint(pygame.mouse.get_pos()):
+                paused = True
+                color = white
             
-    if event.type == pygame.MOUSEBUTTONUP:
-        pygame.mouse.set_cursor((12,12),cursor)
+        if event.type == pygame.MOUSEBUTTONUP:
+            pygame.mouse.set_cursor((12,12),cursor)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_f and dashCounter > 60:
+                dash = True
+                dashCounter = 0
+            if event.key == pygame.K_UP and jumping == False or event.key == pygame.K_SPACE and jumping == False  or event.key == pygame.K_w and jumping == False:
+                doubleCount2 += 1
+                y_Velocity -= jumpHeight
+                jumping = True
+                jumpSoundPlaying = False
+                swhooshSound.play()
+            if event.key == pygame.K_UP and y_Velocity >-1.5 and falling == True and doubleJump and doubleCount2 == 0 or event.key == pygame.K_SPACE and y_Velocity >-1.5 and falling == True and doubleJump and doubleCount2 == 0 or event.key == pygame.K_w and y_Velocity >-1.5 and falling == True and doubleJump and doubleCount2 == 0:
+                    y_Velocity-= jumpHeight
+                    falling = False
+                    doubleJump = False
+                    swhooshSound.play()
+            if event.key == pygame.K_DOWN or event.key == pygame.K_LSHIFT:
+                playerHeight = sneakHeight
+                playerWidth = sneakWidth
+                maxSpeed = 1.5
+                jumpHeight = 5
+                knockback = 0.5
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_UP or event.key == pygame.K_SPACE or event.key == pygame.K_w:
+                falling = True
+                doubleCount2 = 0
+                if doubleJump == False:
+                    doubleCount += 1
+                    if doubleCount == 40:
+                        doubleJump = True
+                        doubleCount = 0
+            if event.key == pygame.K_DOWN or event.key == pygame.K_LSHIFT:
+                playerHeight = 32
+                playerWidth = 32
+                maxSpeed = 4
+                jumpHeight = 8
+                knockback = 2
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                leftVelocity = 0
+                left = False
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                rightVelocity = 0
+                right = False
+        # if keys[pygame.K_UP] and y_Velocity >-3 and falling:
+        #     falling = False
+        #     y_Velocity -= jumpHeight
+        if keys[pygame.K_ESCAPE] and paused == False:
+                paused = True
+    if paused == True and keys[pygame.K_SPACE]:
+            paused = False
+            color = black
+            pygame.mouse.set_cursor((12,12), cursor)
+            pygame.mixer_music.unpause()
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            left = True
+            if leftVelocity < maxSpeed:
+                leftVelocity += acceleration
+    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            right = True
+            if rightVelocity < maxSpeed:
+                    rightVelocity += acceleration
+
+    if keys[pygame.K_s] and shoot == False:
+            shoot = True
+    if mouse[0] and shoot == False:
+            shoot = True
+            
+            
     if y > 500:
         failSound = pygame.mixer.Sound("invalid.mp3")
         failSound.set_volume(0.5)
@@ -309,75 +362,12 @@ while game:
         import Restart
         Restart()
         game = False
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_UP and jumping == False:
-            doubleCount2 += 1
-            y_Velocity -= jumpHeight
-            jumping = True
-            jumpSoundPlaying = False
-            swhooshSound.play()
-        if event.key == pygame.K_UP and y_Velocity >-1.5 and falling == True and doubleJump and doubleCount2 == 0:
-                y_Velocity-= jumpHeight
-                falling = False
-                doubleJump = False
-                swhooshSound.play()
-        if event.key == pygame.K_DOWN:
-            playerHeight = sneakHeight
-            playerWidth = sneakWidth
-            maxSpeed = 1.5
-            jumpHeight = 5
-            knockback = 0.5
-    if event.type == pygame.KEYUP:
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
-            falling = True
-            doubleCount2 = 0
-            if doubleJump == False:
-                doubleCount += 1
-                if doubleCount == 40:
-                    doubleJump = True
-                    doubleCount = 0
-        if event.key == pygame.K_DOWN:
-            playerHeight = 32
-            playerWidth = 32
-            maxSpeed = 4
-            jumpHeight = 8
-            knockback = 2
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-            leftVelocity = 0
-            left = False
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-            rightVelocity = 0
-            right = False
-    # if keys[pygame.K_UP] and y_Velocity >-3 and falling:
-    #     falling = False
-    #     y_Velocity -= jumpHeight
-    if keys[pygame.K_ESCAPE] and paused == False:
-        paused = True
-        
-    if paused == True and keys[pygame.K_SPACE]:
-        paused = False
-        color = black
-        pygame.mouse.set_cursor((12,12), cursor)
-        pygame.mixer_music.unpause()
-    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-        left = True
-        if leftVelocity < maxSpeed:
-            leftVelocity += acceleration
             
     # if y_Velocity != 0:
     #     if collision != False:
     #         y = collision.top - playerHeight
     #         y_Velocity = 0
     #         collision = False
-    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-        right = True
-        if rightVelocity < maxSpeed:
-                rightVelocity += acceleration
-
-    if keys[pygame.K_s] and shoot == False:
-        shoot = True
-    if mouse[0] and shoot == False:
-        shoot = True
     if shoot and Ammo>0:
         bulletCounter += 1
         if bulletCounter == bulletDelay:
@@ -462,6 +452,7 @@ while game:
     #     pygame.draw.rect(smallWindow, (0, 0, 255), pygame.Rect(50+floorX, tile*50, 50, 50))
 
     #     tileRects.append(pygame.Rect(tile*50, 50, 50, 50))
+
     y1 = 0
     for row in map1:
         x1 = 0
@@ -643,7 +634,15 @@ while game:
             frame = 0
         if walkCurrent == 192:
             walkCurrent = 0
-
+    if dash:
+        if pygame.mouse.get_pos()[0]/2 > x:
+            x += 50
+        elif pygame.mouse.get_pos()[0]/2 < x:
+            x -= 50
+        if pygame.mouse.get_pos()[0]/2 > y:
+            y -= 50
+        elif pygame.mouse.get_pos()[0]/2 < y:
+            y -= 50
     scoreRect.topright = (x + 45, y - 15 - impact/2)
     scoreText = font.render("Score: " + str(score), True, black)
     smallWindow.blit(scoreText, scoreRect)
